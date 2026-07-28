@@ -6,7 +6,7 @@ const doc = {
     description: 'CSE 341 - Project 2: Airports & Helicopters Fleet Tracker with 8-field payload validations.'
   },
   host: 'cse341-project2-dj7y.onrender.com',
-  schemes: ['http', 'https'],
+  schemes: ['https', 'http'],
   definitions: {
     AirportInput: {
       airportName: "South Valley Regional Airport",
