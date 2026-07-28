@@ -35,7 +35,30 @@ const createHelicopter = async (req, res) => {
   }
 };
 
+// GET: Retrieve a single helicopter by its ID
+const getSingleHelicopter = async (req, res) => {
+  if (!ObjectId.isValid(req.params.id)) {
+    return res.status(400).json('Must use a valid helicopter id to find a helicopter.');
+  }
+
+  const helicopterId = new ObjectId(req.params.id);
+  const result = await mongodb
+    .getDatabase()
+    .db()
+    .collection('helicopters')
+    .find({ _id: helicopterId })
+    .toArray();
+
+  if (result.length > 0) {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(result[0]); // Returns just the single object
+  } else {
+    res.status(404).json('Helicopter not found.');
+  }
+};
+
 module.exports = {
   getAllHelicopters,
-  createHelicopter
+  createHelicopter,
+  getSingleHelicopter // Added here
 };

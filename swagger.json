@@ -1,0 +1,264 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Utah Aviation Operations API",
+    "description": "CSE 341 - Project 2: Airports & Helicopters Fleet Tracker with 8-field payload validations.",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api-docs": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/airports": {
+      "get": {
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "airportName": {
+                  "example": "any"
+                },
+                "airportCode": {
+                  "example": "any"
+                },
+                "cityLocation": {
+                  "example": "any"
+                },
+                "helipadsAvailable": {
+                  "example": "any"
+                },
+                "providesJetFuel": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "412": {
+            "description": "Precondition Failed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/airports/{id}": {
+      "get": {
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/helicopters": {
+      "get": {
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tailNumber": {
+                  "example": "any"
+                },
+                "modelName": {
+                  "example": "any"
+                },
+                "manufacturer": {
+                  "example": "any"
+                },
+                "yearManufactured": {
+                  "example": "any"
+                },
+                "useType": {
+                  "example": "any"
+                },
+                "passengerCapacity": {
+                  "example": "any"
+                },
+                "maxRangeNauticalMiles": {
+                  "example": "any"
+                },
+                "assignedAirportId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "412": {
+            "description": "Precondition Failed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/helicopters/{id}": {
+      "get": {
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AirportInput": {
+      "type": "object",
+      "properties": {
+        "airportName": {
+          "type": "string",
+          "example": "South Valley Regional Airport"
+        },
+        "airportCode": {
+          "type": "string",
+          "example": "U42"
+        },
+        "cityLocation": {
+          "type": "string",
+          "example": "West Jordan"
+        },
+        "helipadsAvailable": {
+          "type": "number",
+          "example": 2
+        },
+        "providesJetFuel": {
+          "type": "boolean",
+          "example": true
+        }
+      }
+    },
+    "HelicopterInput": {
+      "type": "object",
+      "properties": {
+        "tailNumber": {
+          "type": "string",
+          "example": "N123UT"
+        },
+        "modelName": {
+          "type": "string",
+          "example": "AS350 B3"
+        },
+        "manufacturer": {
+          "type": "string",
+          "example": "Airbus Helicopters"
+        },
+        "yearManufactured": {
+          "type": "number",
+          "example": 2022
+        },
+        "useType": {
+          "type": "string",
+          "example": "Air Ambulance"
+        },
+        "passengerCapacity": {
+          "type": "number",
+          "example": 5
+        },
+        "maxRangeNauticalMiles": {
+          "type": "number",
+          "example": 350
+        },
+        "assignedAirportId": {
+          "type": "string",
+          "example": "652f4c9c1b3d5e001f8a2b3c"
+        }
+      }
+    }
+  }
+}
