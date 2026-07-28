@@ -8,7 +8,8 @@
   "host": "https://cse341-project2-dj7y.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "http",
+    "https"
   ],
   "paths": {
     "/api-docs": {
