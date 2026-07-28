@@ -5,8 +5,8 @@ const doc = {
     title: 'Utah Aviation Operations API',
     description: 'CSE 341 - Project 2: Airports & Helicopters Fleet Tracker with 8-field payload validations.'
   },
-  host: 'localhost:3000',
-  schemes: ['http'],
+  host: 'cse341-project2-dj7y.onrender.com',
+  schemes: ['http', 'https'],
   definitions: {
     AirportInput: {
       airportName: "South Valley Regional Airport",
