@@ -54,8 +54,48 @@ const getSingleAirport = async (req, res) => {
   }
 };
 
+// PUT: Update an existing airport
+const updateAirport = async (req, res) => {
+  if (!ObjectId.isValid(req.params.id)) {
+    return res.status(400).json('Must use a valid airport id to update an airport.');
+  }
+  const airportId = new ObjectId(req.params.id);
+  const airport = {
+    airportName: req.body.airportName,
+    airportCode: req.body.airportCode,
+    cityLocation: req.body.cityLocation,
+    helipadsAvailable: req.body.helipadsAvailable,
+    providesJetFuel: req.body.providesJetFuel
+  };
+
+  const response = await mongodb.getDatabase().db().collection('airports').replaceOne({ _id: airportId }, airport);
+  if (response.matchedCount > 0) {
+    res.status(204).send();
+  } else {
+    res.status(500).json(response.error || 'Some error occurred while updating the airport.');
+  }
+};
+
+// DELETE: Remove an airport
+const deleteAirport = async (req, res) => {
+  if (!ObjectId.isValid(req.params.id)) {
+    return res.status(400).json('Must use a valid airport id to delete an airport.');
+  }
+  const airportId = new ObjectId(req.params.id);
+  const response = await mongodb.getDatabase().db().collection('airports').deleteOne({ _id: airportId });
+  
+  if (response.deletedCount > 0) {
+    res.status(204).send();
+  } else {
+    res.status(500).json(response.error || 'Some error occurred while deleting the airport.');
+  }
+};
+
+// Update your module.exports at the bottom to include them:
 module.exports = {
   getAllAirports,
   createAirport,
-  getSingleAirport // Added here
+  getSingleAirport,
+  updateAirport,
+  deleteAirport
 };
