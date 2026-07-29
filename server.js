@@ -6,7 +6,7 @@ const session = require('express-session');
 const passport = require('passport');
 const cors = require('cors');
 const GitHubStrategy = require("passport-github2").Strategy;
-const MongoStore = require('connect-mongo');
+const { MongoStore } = require('connect-mongo');
 
 const app = express();
 const port = process.env.PORT || 3000;
