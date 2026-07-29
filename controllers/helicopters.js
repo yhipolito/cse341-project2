@@ -57,8 +57,52 @@ const getSingleHelicopter = async (req, res) => {
   }
 };
 
+// PUT: Update an existing helicopter (Enforcing all 8 fields)
+const updateHelicopter = async (req, res) => {
+  if (!ObjectId.isValid(req.params.id)) {
+    return res.status(400).json('Must use a valid helicopter id to update a helicopter.');
+  }
+  const helicopterId = new ObjectId(req.params.id);
+  const helicopter = {
+    tailNumber: req.body.tailNumber,
+    modelName: req.body.modelName,
+    manufacturer: req.body.manufacturer,
+    yearManufactured: req.body.yearManufactured,
+    useType: req.body.useType,
+    passengerCapacity: req.body.passengerCapacity,
+    maxRangeNauticalMiles: req.body.maxRangeNauticalMiles,
+    assignedAirportId: new ObjectId(req.body.assignedAirportId)
+  };
+
+  const response = await mongodb.getDatabase().db().collection('helicopters').replaceOne({ _id: helicopterId }, helicopter);
+  if (response.matchedCount > 0) {
+    res.status(204).send();
+  } else {
+    res.status(500).json(response.error || 'Some error occurred while updating the helicopter.');
+  }
+};
+
+// DELETE: Remove a helicopter
+const deleteHelicopter = async (req, res) => {
+  if (!ObjectId.isValid(req.params.id)) {
+    return res.status(400).json('Must use a valid helicopter id to delete a helicopter.');
+  }
+  const helicopterId = new ObjectId(req.params.id);
+  const response = await mongodb.getDatabase().db().collection('helicopters').deleteOne({ _id: helicopterId });
+  
+  if (response.deletedCount > 0) {
+    res.status(204).send();
+  } else {
+    res.status(500).json(response.error || 'Some error occurred while deleting the helicopter.');
+  }
+};
+
+// Update your module.exports at the bottom to include them:
 module.exports = {
   getAllHelicopters,
   createHelicopter,
-  getSingleHelicopter // Added here
+  getSingleHelicopter,
+  updateHelicopter,
+  deleteHelicopter
 };
+
