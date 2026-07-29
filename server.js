@@ -22,7 +22,7 @@ app.use(session({
   saveUninitialized: false, 
   store: MongoStore.create({
     // Make sure MONGODB_URI matches the key name in your Render Environment dashboard
-    mongoUrl: process.env.MONGODB_URI, 
+    mongoUrl: process.env.MONGODB_URL, 
     collectionName: 'sessions'
   }),
   cookie: {
