@@ -6,23 +6,37 @@ const session = require('express-session');
 const passport = require('passport');
 const cors = require('cors');
 const GitHubStrategy = require("passport-github2").Strategy;
+const MongoStore = require('connect-mongo');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app
-.use(bodyParser. json())
-.use(session({
-  secret: "secret",
+// 2. MIDDLEWARES & PROXY SETTINGS
+app.use(bodyParser.json());
+app.set('trust proxy', 1); // Crucial for keeping you logged in on Render
+
+// 3. UPDATED SESSION CONFIGURATION
+app.use(session({
+  secret: process.env.SESSION_SECRET || "secret", 
   resave: false,
-  saveUninitialized: true
-}))
+  saveUninitialized: false, 
+  store: MongoStore.create({
+    // Make sure MONGODB_URI matches the key name in your Render Environment dashboard
+    mongoUrl: process.env.MONGODB_URI, 
+    collectionName: 'sessions'
+  }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
+    secure: true,                // Required for HTTPS on Render
+    sameSite: 'none'             // Allows cross-site cookie sharing for GitHub OAuth
+  }
+}));
 // This is the basic express session({..}) initialization.
-.use(passport.initialize())
+app.use(passport.initialize())
 // init passport on every route call.
-.use(passport.session())
+app.use(passport.session())
 // allow passport to use "express-session".
-.use((req, res, next) => {
+app.use((req, res, next) => {
     res. setHeader("Acress-Controll-Allow-Origin", "*"); 
     res .setHeader(
     "Access-Control-Allow-Headers",
