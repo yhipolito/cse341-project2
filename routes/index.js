@@ -36,4 +36,25 @@ router.get("/logout", function (req, res, next) {
   });
 });
 
+// 1. HOME ROUTE: Shows your current login status dynamically
+router.get('/', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.send(`Logged In as ${req.user.displayName || req.user.username}`);
+  } else {
+    res.send('Logged Out');
+  }
+});
+
+// 2. CALLBACK ROUTE: Processes the code GitHub sends back
+router.get('/auth/github/callback', 
+  passport.authenticate('github', { 
+    failureRedirect: '/api-docs', // Redirect here if login fails
+    session: true 
+  }),
+  (req, res) => {
+    // Successful login! Redirect to your home page or documentation
+    res.redirect('/'); 
+  }
+);
+
 module.exports = router;
