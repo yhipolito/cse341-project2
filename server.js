@@ -48,9 +48,14 @@ res.setHeader(
     );
 next ();
 })
-.use(cors({methods: ["GET", "POST", "DELETE", "UPDATE", "PUT","PATCH" ]}))
-.use(cors ({ origin: "*" }))
-.use("/", require("./routes/index.js"));
+app.use(cors({
+  origin: 'https://onrender.com', // Explicitly allow your domain
+  methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],  // Allowed methods (Note: "UPDATE" is not a real HTTP method)
+  credentials: true                                    // CRITICAL: Allows session cookies to pass through
+}));
+
+app.use("/", require("./routes/index.js"));
+
 
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID, 
