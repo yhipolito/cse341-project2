@@ -1,5 +1,6 @@
 const isAuthenticated = (req, res, next) => {
-    if (req.session.user === undefined){
+    // Use Passport's built-in check or check if req.user exists
+    if (!req.isAuthenticated() || req.user === undefined) {
         return res.status(401).json("You do not have access.");
     }
     next();
@@ -7,4 +8,4 @@ const isAuthenticated = (req, res, next) => {
 
 module.exports = {
     isAuthenticated
-}
+};
