@@ -1,10 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
-const airportsController = require('../controllers/airports');
-const { isAuthenticated } = require("../middleware/authenticate");
-const helicoptersController = require('../controllers/helicopters');
-const validationGuard = require('../middleware/validate');
 
+// Swagger UI Configuration
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../swagger.json');
 
@@ -15,20 +12,11 @@ router.get('/api-docs', swaggerUi.setup(swaggerDocument, {
   }
 }));
 
-// --- Airports API Endpoints ---
-router.get('/airports', airportsController.getAllAirports);
-router.get('/airports/:id', airportsController.getSingleAirport);
-router.post('/airports', isAuthenticated, validationGuard.saveAirport, airportsController.createAirport);
-router.put('/airports/:id', isAuthenticated, validationGuard.saveAirport, airportsController.updateAirport); // Added with validation
-router.delete('/airports/:id', isAuthenticated, airportsController.deleteAirport); // Added
+// --- Mount Separated Resource Sub-Routers ---
+router.use('/airports', require('./airports'));
+router.use('/helicopters', require('./helicopters'));
 
-// --- Helicopters API Endpoints ---
-router.get('/helicopters', helicoptersController.getAllHelicopters);
-router.get('/helicopters/:id', helicoptersController.getSingleHelicopter);
-router.post('/helicopters', isAuthenticated, validationGuard.saveHelicopter, helicoptersController.createHelicopter);
-router.put('/helicopters/:id', isAuthenticated, validationGuard.saveHelicopter, helicoptersController.updateHelicopter); // Added with validation
-router.delete('/helicopters/:id', isAuthenticated, helicoptersController.deleteHelicopter); // Added
-
+// --- Authentication & Identity Flows ---
 router.get("/login", passport.authenticate("github"), (req, res) => {});
 
 router.get("/logout", function (req, res, next) {
@@ -40,7 +28,7 @@ router.get("/logout", function (req, res, next) {
   });
 });
 
-// 1. HOME ROUTE: Shows your current login status dynamically
+// HOME ROUTE: Dynamic login landing status check
 router.get('/', (req, res) => {
   if (req.isAuthenticated()) {
     res.send(`Logged In as ${req.user.displayName || req.user.username}`);
@@ -49,14 +37,13 @@ router.get('/', (req, res) => {
   }
 });
 
-// 2. CALLBACK ROUTE: Processes the code GitHub sends back
+// CALLBACK ROUTE: Processes the code GitHub OAuth returns
 router.get('/auth/github/callback', 
   passport.authenticate('github', { 
-    failureRedirect: '/api-docs', // Redirect here if login fails
+    failureRedirect: '/api-docs', 
     session: true 
   }),
   (req, res) => {
-    // Successful login! Redirect to your home page or documentation
     res.redirect('/'); 
   }
 );
